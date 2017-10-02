@@ -2,7 +2,7 @@
 // const generateBtn = $('.generate-btn');
 
 $('.generate-btn').on('click', () => {
-  populateColorObj(generateHexValues(5));
+	populateColorSwatch(populateColorObj(generateHexValues(5)));
 });
 
 const generateHexValues = num => {
@@ -17,18 +17,27 @@ const generateHexValues = num => {
 
 const populateColorObj = hexArray => {
 	const palette = {
-    color1: '',
-    color2: '',
-    color3: '',
-    color4: '',
-    color5: '',
-  }
+		color1: '',
+		color2: '',
+		color3: '',
+		color4: '',
+		color5: '',
+	};
 
-  Object.keys(palette).map((key, i) => {
-    palette[key] = hexArray[i]
-  })
+	Object.keys(palette).map((key, i) => {
+		palette[key] = hexArray[i];
+	});
+
+	return palette;
 };
 
-const populateColorSwatch = (paletteObj) => {
-  const randoPalettes = $('.gen-color');
-}
+const populateColorSwatch = paletteObj => {
+	const paletteKeys = Object.keys(paletteObj);
+
+	$('.gen-color').each((i, palette) => {
+    let color = paletteKeys[i]
+		$(palette).css('background-color', paletteObj[color]);
+    $(palette).children('p').text(paletteObj[color])
+	});
+
+};
