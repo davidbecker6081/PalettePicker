@@ -1,0 +1,36 @@
+body {
+  padding: 20px;
+}
+
+main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border: 2px solid black;
+}
+
+.generate-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+.rando-color-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.gen-color {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 150px;
+  padding: 5px;
+  box-shadow: 0px 0px 5px 0px rgba(0,0,0, 0.5);
+}
