@@ -16,6 +16,19 @@ $('.generate-btn').on('click', () => {
 	populateColorSwatch(populateColorObj(generateHexValues(5)));
 });
 
+$('.submitProjectBtn').on('click', (e) => {
+	e.preventDefault();
+	const name = $('.addProjectInput').val()
+
+	fetch('/api/v1/projects', {
+		method: 'POST',
+		body: JSON.stringify({projectName: name}),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	})
+})
+
 $('.lock-img').on('click', e => {
 	// $(e.target).toggleClass('lock-img-locked')
 	toggleLock(e);
