@@ -88,7 +88,7 @@ const populateColorSwatch = () => {
 };
 
 const appendProjects = projects => {
-  const projects = mockRetrieve()
+  const projects = mockRetrieveFull()
   const projectKeys = Object.keys(projects)
   const projectDisplay = projectKeys.map((projectKey, i) => `<article class="project-container" id="projectContainer">
     <h3>${projectKey}</h3>
@@ -192,7 +192,7 @@ const Palettes = () => {
 	};
 };
 
-const mockRetrieve = () => {
+const mockRetrieveFull = () => {
 	return {
 		Project1: {
 			palettes: [
