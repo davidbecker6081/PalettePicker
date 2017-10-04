@@ -25,7 +25,7 @@ app.post('/api/projects', (request, response) => {
     })
 })
 
-app.post('/api/projects/:projectName/palettes', (request, response) => {
+app.post('/api/palettes', (request, response) => {
   const { projectId, paletteName, colors } = request.body;
   const insertObj = {
     palette_name: paletteName,
@@ -47,22 +47,25 @@ app.post('/api/projects/:projectName/palettes', (request, response) => {
 
 })
 
-// for (let requiredParameter of ['title', 'author']) {
-//   if (!paper[requiredParameter]) {
-//     return response
-//       .status(422)
-//       .send({ error: `Expected format: { title: <String>, author: <String> }. You're missing a "${requiredParameter}" property.` });
-//   }
-// }
-//
-// database('papers').insert(paper, 'id')
-//   .then(paper => {
-//     response.status(201).json({ id: paper[0] })
-//   })
-//   .catch(error => {
-//     response.status(500).json({ error });
-//   });
+app.get('/api/projects', (request, response) => {
+  database('projects').select()
+    .then(projects => {
+      response.status(200).json(projects)
+    })
+    .catch(error => {
+      response.status(500).json({ error })
+    })
+})
 
+// app.get('/api/v1/papers', (request, response) => {
+//   database('papers').select()
+//     .then((papers) => {
+//       response.status(200).json(papers);
+//     })
+//     .catch((error) => {
+//       response.status(500).json({ error });
+//     });
+// });
 
 app.listen(app.get('port'), () => {
 	console.log(`${app.locals.title} is running on ${app.get('port')}.`);
