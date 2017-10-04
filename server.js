@@ -49,10 +49,11 @@ app.post('/api/palettes', (request, response) => {
     if (!request.body[requiredParams]) {
       return response
         .status(422)
-        .send({ error: `Expected format: { projectId: <Integer>, paletteName: <String>, colors: <Array>. You're missing a ${keys} property.`})
+        .send({ error: `Expected format: { projectId: <Integer>, paletteName: <String>, colors: <Array>. You're missing a ${keys} property.` })
     } else if (request.body['colors'].length !== 5) {
-      .status(422)
-      .send({ error: `Expected format: { projectId: <Integer>, paletteName: <String>, colors: <Array>. You're missing a color or two.`})
+      return response
+        .status(422)
+        .send({ error: `Expected format: { projectId: <Integer>, paletteName: <String>, colors: <Array>. You're missing a color or two.` })
     }
   }
 
@@ -97,6 +98,15 @@ app.get('/api/palettes', (request, response) => {
 app.delete('/api/palettes/:paletteName', (request, response) => {
   const { projectId } = request.body;
   const { paletteName } = request.params;
+  const requiredKeys = Object.keys(request.body)
+
+  for (let requiredParams of requiredKeys) {
+    if (!request.body[requiredParams]) {
+      return response
+        .status(422)
+        .send({ error: `Expected format: { projectId: <Integer> You're missing a ${keys} property.` })
+    }
+  }
 
   database('palettes')
     .where('palette_name', paletteName)
