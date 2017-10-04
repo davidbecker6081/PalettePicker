@@ -43,8 +43,6 @@ const getAllProjects = () => {
 }
 
 const populateDropDowns = (projects) => {
-	console.log(projects[0].id, projects[0].project_Name);
-
 	$('.project-list').each((i, elemDisplay) => {
 		projects.forEach((elemProj) => {
 			$(elemDisplay).append(`<option value=${elemProj.project_Name} data-projectId=${elemProj.id}>${elemProj.project_Name}</option>`)
@@ -55,11 +53,10 @@ const populateDropDowns = (projects) => {
 	// id: 6
 	// project_Name: "Dave"
 	// updated_at: "2017-10-04T21:09:43.940Z"
-
 }
 
-getAllProjects()
 
+$(document).ready(getAllProjects)
 
 $('.lock-img').on('click', e => {
 	// $(e.target).toggleClass('lock-img-locked')
