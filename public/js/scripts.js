@@ -28,7 +28,7 @@ const postProject = () => {
 	})
 	.then(result => {
 		console.log(result);
-		populateDropDowns(result[0].id, result[0].project_Name)
+		populateDropDowns(result)
 	})
 	.catch(error => {
 		console.log(error)
@@ -37,22 +37,19 @@ const postProject = () => {
 
 const getAllProjects = () => {
 	fetch('/api/projects')
-	.then(response => {
-		if (response.status !== 201){
-			console.log('error')
-			return false
-		}
-		return response.json()
-	})
+	.then(response => response.json())
 	.then(results => populateDropDowns(results))
 	.catch(error => console.log(error))
-
 }
 
-const populateDropDowns = (id, projectName) => {
-	console.log(id, projectName);
+const populateDropDowns = (projects) => {
+	console.log(projects[0].id, projects[0].project_Name);
 
-	
+	$('.project-list').each((i, elemDisplay) => {
+		projects.forEach((elemProj) => {
+			$(elemDisplay).append(`<option value=${elemProj.project_Name} data-projectId=${elemProj.id}>${elemProj.project_Name}</option>`)
+		})
+	})
 
 	// created_at: "2017-10-04T21:09:43.940Z"
 	// id: 6
@@ -61,7 +58,7 @@ const populateDropDowns = (id, projectName) => {
 
 }
 
-populateDropDowns()
+getAllProjects()
 
 
 $('.lock-img').on('click', e => {
