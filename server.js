@@ -79,6 +79,14 @@ app.get('/api/projects', (request, response) => {
 app.get('/api/palettes', (request, response) => {
   database('palettes').select()
     .then(palettes => {
+      if (palettes.length === 0){
+        return response
+          .status(404)
+          .send({ error: `It doesnt seem like you have any palettes in that project :-(` })
+      }
+      return palettes
+    })
+    .then(palettes => {
       response.status(200).json(palettes)
     })
     .catch(error => {
