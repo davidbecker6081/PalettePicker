@@ -6,8 +6,11 @@ $('.generate-btn').on('click', () => {
 
 $('.submitProjectBtn').on('click', (e) => {
 	e.preventDefault();
-	const name = $('.addProjectInput').val()
-	console.log('name', name);
+	postProject()
+})
+
+const postProject = () => {
+	const name = $('.addProjectInput').val();
 
 	fetch('/api/projects', {
 		method: 'POST',
@@ -21,13 +24,44 @@ $('.submitProjectBtn').on('click', (e) => {
 			console.log('bad response')
 			return false
 		}
-		// appendProjectName(name)
+		return response.json()
+	})
+	.then(result => {
+		console.log(result);
+		populateDropDowns(result[0].id, result[0].project_Name)
 	})
 	.catch(error => {
 		console.log(error)
 	})
-})
+}
 
+const getAllProjects = () => {
+	fetch('/api/projects')
+	.then(response => {
+		if (response.status !== 201){
+			console.log('error')
+			return false
+		}
+		return response.json()
+	})
+	.then(results => populateDropDowns(results))
+	.catch(error => console.log(error))
+
+}
+
+const populateDropDowns = (id, projectName) => {
+	console.log(id, projectName);
+
+	
+
+	// created_at: "2017-10-04T21:09:43.940Z"
+	// id: 6
+	// project_Name: "Dave"
+	// updated_at: "2017-10-04T21:09:43.940Z"
+
+}
+
+populateDropDowns()
 
 
 $('.lock-img').on('click', e => {
@@ -101,16 +135,8 @@ const populateColorSwatch = () => {
 	});
 };
 
-const addProjectToList = (name) => {
-
-}
-
-const appendProject = (name) => {
-
-}
-
-const appendProjects = projects => {
-  const projectKeys = Object.keys(projects)
+const appendPalettes = (projectId) => {
+  const projectKeys = Object.keys(project)
   const projectDisplay = projectKeys.map((projectKey, i) => `<article class="project-container" id="projectContainer">
     <h3>${projectKey}</h3>
     <div class="palette-container" id="paletteContainer">
