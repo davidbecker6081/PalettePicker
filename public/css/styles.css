@@ -1,3 +1,7 @@
+* {
+  font-family: 'Raleway', sans-serif;
+}
+
 body {
   padding: 20px;
 }
@@ -8,6 +12,10 @@ main {
   justify-content: center;
   flex-direction: column;
   border: 2px solid black;
+}
+
+h1 {
+  font-weight: 700;
 }
 
 .generate-container {
@@ -34,6 +42,7 @@ main {
   height: 150px;
   padding: 5px;
   box-shadow: 0px 0px 5px 0px rgba(0,0,0, 0.5);
+  transition: 2s;
 }
 
 .lock-img {
@@ -54,4 +63,45 @@ main {
 
 .lock-img:hover {
   cursor: pointer;
+}
+
+.swatch {
+  height: 50px;
+  width: 50px;
+}
+
+.palette-color1 {
+  background-color: #8b6d17;
+}
+
+.palette-color2 {
+  background-color: #c9d813;
+}
+
+.palette-color3 {
+  background-color: #5ff649;
+}
+
+.palette-color4 {
+  background-color: #12de24;
+}
+
+.palette-color5 {
+  background-color: #d6525b;
+}
+
+.delete-btn {
+  height: 30px;
+  width: 20px;
+  background: none;
+  background-image: url('../assets/recycling-bin.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: none;
+}
+
+.delete-btn:hover {
+  cursor: pointer;
+  background-image: url('../assets/trash-can.png')
 }
