@@ -14,16 +14,37 @@ app.set('port', process.env.PORT || 3000);
 app.locals.title = 'Palette Picker';
 
 app.post('/api/projects', (request, response) => {
-  const { projectName } = request.body
+  const { projectName } = request.body;
 
   database('projects').insert({ project_Name: projectName }, '*')
     .then(project => {
-      console.log('good');
       response.status(201).json(project)
     })
     .catch(error => {
       response.status(500).json({ error })
     })
+})
+
+app.post('/api/projects/:projectName/palettes', (request, response) => {
+  const { projectId, paletteName, colors } = request.body;
+  const insertObj = {
+    palette_name: paletteName,
+    palette_color1: colors[0],
+    palette_color2: colors[1],
+    palette_color3: colors[2],
+    palette_color4: colors[3],
+    palette_color5: colors[4],
+    project_id: projectId
+  }
+
+  database('palettes').insert(insertObj, '*')
+    .then(project => {
+      response.status(201).json(project)
+    })
+    .catch(error => {
+      response.status(500).json({ error })
+    })
+
 })
 
 // for (let requiredParameter of ['title', 'author']) {
