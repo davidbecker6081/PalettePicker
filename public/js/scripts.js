@@ -1,15 +1,3 @@
-// const randoPalettes = $('.gen-color');
-// const generateBtn = $('.generate-btn');
-
-// array of swatch objects
-// [
-// {color: '', locked: false},
-// {color: '', locked: false},
-// {color: '', locked: false},
-// {color: '', locked: false},
-// {color: '', locked: false},
-// ]
-
 const palette = [];
 
 $('.generate-btn').on('click', () => {
@@ -18,16 +6,57 @@ $('.generate-btn').on('click', () => {
 
 $('.submitProjectBtn').on('click', (e) => {
 	e.preventDefault();
-	const name = $('.addProjectInput').val()
+	postProject()
+})
 
-	fetch('/api/v1/projects', {
+const postProject = () => {
+	const name = $('.addProjectInput').val();
+
+	fetch('/api/projects', {
 		method: 'POST',
 		body: JSON.stringify({projectName: name}),
 		headers: {
 			'Content-Type': 'application/json'
 		}
 	})
-})
+	.then(response => {
+		if (response.status !== 201){
+			console.log('bad response')
+			return false
+		}
+		return response.json()
+	})
+	.then(result => {
+		console.log(result);
+		populateDropDowns(result)
+	})
+	.catch(error => {
+		console.log(error)
+	})
+}
+
+const getAllProjects = () => {
+	fetch('/api/projects')
+	.then(response => response.json())
+	.then(results => populateDropDowns(results))
+	.catch(error => console.log(error))
+}
+
+const populateDropDowns = (projects) => {
+	$('.project-list').each((i, elemDisplay) => {
+		projects.forEach((elemProj) => {
+			$(elemDisplay).append(`<option value=${elemProj.project_Name} data-projectId=${elemProj.id}>${elemProj.project_Name}</option>`)
+		})
+	})
+
+	// created_at: "2017-10-04T21:09:43.940Z"
+	// id: 6
+	// project_Name: "Dave"
+	// updated_at: "2017-10-04T21:09:43.940Z"
+}
+
+
+$(document).ready(getAllProjects)
 
 $('.lock-img').on('click', e => {
 	// $(e.target).toggleClass('lock-img-locked')
@@ -100,9 +129,8 @@ const populateColorSwatch = () => {
 	});
 };
 
-const appendProjects = projects => {
-  const projects = mockRetrieveFull()
-  const projectKeys = Object.keys(projects)
+const appendPalettes = (projectId) => {
+  const projectKeys = Object.keys(project)
   const projectDisplay = projectKeys.map((projectKey, i) => `<article class="project-container" id="projectContainer">
     <h3>${projectKey}</h3>
     <div class="palette-container" id="paletteContainer">
@@ -120,115 +148,4 @@ const appendProjects = projects => {
   </article>`)
 
   $('.project.display').append()
-};
-
-const mockRetrieve = () => {
-	return {
-		Project1: {
-			palettes: [
-				{
-					paletteName: 'paletteFun',
-					colors: ['#FFFFFF', '#000000', '#FFFFFF', '#000000', '#FFFFFF'],
-					foreignID: '1',
-				},
-				{
-					paletteName: 'paletteNotFun',
-					colors: ['#000000', '#000000', '#000000', '#000000', '#000000'],
-					foreignID: '1',
-				},
-			],
-		},
-    Project2: {
-      palettes: [
-        {
-    			paletteName: 'paletteOther',
-    			colors: ['#F9D0F0', '#D6C400', '#445566', '#A1C1D1', '#B9C3D6'],
-    			foreignID: '1',
-    		}
-      ]
-    }
-	};
-};
-
-
-const retrieveProjects = () => {
-	// fetch('/api/projects')
-	// .then(response => {
-	//   if (response.status !== 200) {
-	//     return false
-	//   }
-	//   return response
-	// })
-	// .then(response => response.json())
-	// .then(parsedResponse => appendProjects(parsedResponse))
-};
-
-// fetch('/api/users', {
-// 			method: 'POST',
-// 			body: JSON.stringify(user),
-// 			headers: {
-// 				'Content-Type': 'application/json'
-// 			}
-// 		})
-// 			.then(response => {
-// 				if (response.status !== 200) {
-// 					dispatch(loginHasErred(true));
-// 				} else {
-// 					return response;
-// 				}
-// 			})
-
-const Projects = () => {
-	return {
-		'1': { projectName: 'Project1' },
-		'2': { projectName: 'Project2' },
-	};
-};
-
-const Palettes = () => {
-	return {
-		'1': {
-			paletteName: 'paletteFun',
-			colors: ['#FFFFFF', '#000000', '#FFFFFF', '#000000', '#FFFFFF'],
-			foreignID: '1',
-		},
-		'2': {
-			paletteName: 'paletteNotFun',
-			colors: ['#000000', '#000000', '#000000', '#000000', '#000000'],
-			foreignID: '1',
-		},
-		'3': {
-			paletteName: 'paletteOther',
-			colors: ['#F9D0F0', '#D6C400', '#445566', '#A1C1D1', '#B9C3D6'],
-			foreignID: '1',
-		},
-	};
-};
-
-const mockRetrieveFull = () => {
-	return {
-		Project1: {
-			palettes: [
-				{
-					paletteName: 'paletteFun',
-					colors: ['#FFFFFF', '#000000', '#FFFFFF', '#000000', '#FFFFFF'],
-					foreignID: '1',
-				},
-				{
-					paletteName: 'paletteNotFun',
-					colors: ['#000000', '#000000', '#000000', '#000000', '#000000'],
-					foreignID: '1',
-				},
-			],
-		},
-    Project2: {
-      palettes: [
-        {
-    			paletteName: 'paletteOther',
-    			colors: ['#F9D0F0', '#D6C400', '#445566', '#A1C1D1', '#B9C3D6'],
-    			foreignID: '1',
-    		}
-      ]
-    }
-	};
 };

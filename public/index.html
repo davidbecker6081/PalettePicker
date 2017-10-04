@@ -60,16 +60,19 @@
   </main>
 
     <section class="project-display">
+      <select class="project-list" id="projectDisplayList" name="project-list">
+        <option value=""></option>
+      </select>
       <article class="project-container" id="projectContainer">
         <h3>Example Project</h3>
         <div class="palette-container" id="paletteContainer">
           <h4>Palette Name</h4>
           <div class="palette-colors-container" id="paletteColors">
-            <div class="palette-color1 swatch" id="paletteColor"></div>
-            <div class="palette-color2 swatch" id="paletteColor"></div>
-            <div class="palette-color3 swatch" id="paletteColor"></div>
-            <div class="palette-color4 swatch" id="paletteColor"></div>
-            <div class="palette-color5 swatch" id="paletteColor"></div>
+            <div class="swatch palette-color1" id="paletteColor"></div>
+            <div class="swatch palette-color2" id="paletteColor"></div>
+            <div class="swatch palette-color3" id="paletteColor"></div>
+            <div class="swatch palette-color4" id="paletteColor"></div>
+            <div class="swatch palette-color5" id="paletteColor"></div>
           </div>
           <button class="delete-btn" id="deleteBtn"></button>
         </div>
