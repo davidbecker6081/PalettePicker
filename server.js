@@ -111,7 +111,7 @@ app.delete('/api/palettes/:id', (request, response) => {
     .del()
     .then((length) => {
       length
-        ? response.status(200).json('success')
+        ? response.sendStatus(204)
         : response.status(422).send({ error: 'nothing to delete with that id' })
     })
     .catch(error => {

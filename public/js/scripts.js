@@ -1,15 +1,3 @@
-// const randoPalettes = $('.gen-color');
-// const generateBtn = $('.generate-btn');
-
-// array of swatch objects
-// [
-// {color: '', locked: false},
-// {color: '', locked: false},
-// {color: '', locked: false},
-// {color: '', locked: false},
-// {color: '', locked: false},
-// ]
-
 const palette = [];
 
 $('.generate-btn').on('click', () => {
@@ -19,15 +7,28 @@ $('.generate-btn').on('click', () => {
 $('.submitProjectBtn').on('click', (e) => {
 	e.preventDefault();
 	const name = $('.addProjectInput').val()
+	console.log('name', name);
 
-	fetch('/api/v1/projects', {
+	fetch('/api/projects', {
 		method: 'POST',
 		body: JSON.stringify({projectName: name}),
 		headers: {
 			'Content-Type': 'application/json'
 		}
 	})
+	.then(response => {
+		if (response.status !== 201){
+			console.log('bad response')
+			return false
+		}
+		// appendProjectName(name)
+	})
+	.catch(error => {
+		console.log(error)
+	})
 })
+
+
 
 $('.lock-img').on('click', e => {
 	// $(e.target).toggleClass('lock-img-locked')
@@ -100,8 +101,15 @@ const populateColorSwatch = () => {
 	});
 };
 
+const addProjectToList = (name) => {
+
+}
+
+const appendProject = (name) => {
+
+}
+
 const appendProjects = projects => {
-  const projects = mockRetrieveFull()
   const projectKeys = Object.keys(projects)
   const projectDisplay = projectKeys.map((projectKey, i) => `<article class="project-container" id="projectContainer">
     <h3>${projectKey}</h3>
@@ -121,31 +129,3 @@ const appendProjects = projects => {
 
   $('.project.display').append()
 };
-
-
-// const retrieveProjects = () => {
-	// fetch('/api/projects')
-	// .then(response => {
-	//   if (response.status !== 200) {
-	//     return false
-	//   }
-	//   return response
-	// })
-	// .then(response => response.json())
-	// .then(parsedResponse => appendProjects(parsedResponse))
-// };
-
-// fetch('/api/users', {
-// 			method: 'POST',
-// 			body: JSON.stringify(user),
-// 			headers: {
-// 				'Content-Type': 'application/json'
-// 			}
-// 		})
-// 			.then(response => {
-// 				if (response.status !== 200) {
-// 					dispatch(loginHasErred(true));
-// 				} else {
-// 					return response;
-// 				}
-// 			})
