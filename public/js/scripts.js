@@ -122,36 +122,8 @@ const appendProjects = projects => {
   $('.project.display').append()
 };
 
-const mockRetrieve = () => {
-	return {
-		Project1: {
-			palettes: [
-				{
-					paletteName: 'paletteFun',
-					colors: ['#FFFFFF', '#000000', '#FFFFFF', '#000000', '#FFFFFF'],
-					foreignID: '1',
-				},
-				{
-					paletteName: 'paletteNotFun',
-					colors: ['#000000', '#000000', '#000000', '#000000', '#000000'],
-					foreignID: '1',
-				},
-			],
-		},
-    Project2: {
-      palettes: [
-        {
-    			paletteName: 'paletteOther',
-    			colors: ['#F9D0F0', '#D6C400', '#445566', '#A1C1D1', '#B9C3D6'],
-    			foreignID: '1',
-    		}
-      ]
-    }
-	};
-};
 
-
-const retrieveProjects = () => {
+// const retrieveProjects = () => {
 	// fetch('/api/projects')
 	// .then(response => {
 	//   if (response.status !== 200) {
@@ -161,7 +133,7 @@ const retrieveProjects = () => {
 	// })
 	// .then(response => response.json())
 	// .then(parsedResponse => appendProjects(parsedResponse))
-};
+// };
 
 // fetch('/api/users', {
 // 			method: 'POST',
@@ -177,58 +149,3 @@ const retrieveProjects = () => {
 // 					return response;
 // 				}
 // 			})
-
-const Projects = () => {
-	return {
-		'1': { projectName: 'Project1' },
-		'2': { projectName: 'Project2' },
-	};
-};
-
-const Palettes = () => {
-	return {
-		'1': {
-			paletteName: 'paletteFun',
-			colors: ['#FFFFFF', '#000000', '#FFFFFF', '#000000', '#FFFFFF'],
-			foreignID: '1',
-		},
-		'2': {
-			paletteName: 'paletteNotFun',
-			colors: ['#000000', '#000000', '#000000', '#000000', '#000000'],
-			foreignID: '1',
-		},
-		'3': {
-			paletteName: 'paletteOther',
-			colors: ['#F9D0F0', '#D6C400', '#445566', '#A1C1D1', '#B9C3D6'],
-			foreignID: '1',
-		},
-	};
-};
-
-const mockRetrieveFull = () => {
-	return {
-		Project1: {
-			palettes: [
-				{
-					paletteName: 'paletteFun',
-					colors: ['#FFFFFF', '#000000', '#FFFFFF', '#000000', '#FFFFFF'],
-					foreignID: '1',
-				},
-				{
-					paletteName: 'paletteNotFun',
-					colors: ['#000000', '#000000', '#000000', '#000000', '#000000'],
-					foreignID: '1',
-				},
-			],
-		},
-    Project2: {
-      palettes: [
-        {
-    			paletteName: 'paletteOther',
-    			colors: ['#F9D0F0', '#D6C400', '#445566', '#A1C1D1', '#B9C3D6'],
-    			foreignID: '1',
-    		}
-      ]
-    }
-	};
-};
