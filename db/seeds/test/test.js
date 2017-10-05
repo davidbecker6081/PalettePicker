@@ -62,7 +62,7 @@ const createPalette = (knex, palette) => {
 exports.seed = function(knex, Promise) {
   // Deletes ALL existing entries
   return knex('palettes').del()
-    .then(() => knex('projects').del(()))
+    .then(() => knex('projects').del())
     .then(() => {
       // Inserts seed entries
       let projectPromises = [];
@@ -73,6 +73,6 @@ exports.seed = function(knex, Promise) {
 
       return Promise.all(projectPromises)
     })
-    .then(() => console.log('Seeding is complete'))
-    .catch(error => console.log(`Error seeding data: ${error}`))
+    .then(() => {console.log('Seeding is complete')})
+    .catch(error => {console.log(`Error seeding data: ${error}`)})
 };
