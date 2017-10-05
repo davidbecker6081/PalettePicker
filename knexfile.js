@@ -11,6 +11,18 @@ module.exports = {
     useNullAsDefault: true
   },
 
+  test: {
+    client: 'pg',
+    connection: 'postgres://localhost/palettepicker_test',
+    migrations: {
+      directory: './db/migrations'
+    },
+    useNullAsDefault: true,
+    seeds: {
+      direction: './db/seeds/test'
+    }
+  },
+
   staging: {
     client: 'postgresql',
     connection: {
