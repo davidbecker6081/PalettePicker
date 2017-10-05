@@ -195,8 +195,10 @@ $('.generate-btn').on('click', () => {
 	populateColorSwatch(populateColorObj(generateHexValues(5)));
 });
 
-$('.project-container').on('click', '.palette-container', (e) => {
-	const paletteId = $(e.currentTarget).children('.delete-btn').prop('id')
+$('.project-container').on('click', '.palette-colors-container', (e) => {
+	const paletteId = $(e.target).parents('.palette-container').children('.delete-btn').prop('id')
+
+	console.log(paletteId);
 
 	fetch(`/api/palettes/${paletteId}`)
 	.then(response => response.json())
