@@ -42,6 +42,33 @@ const populateDropDowns = (projects) => {
 	})
 }
 
+const appendPalette = (palettes) => {
+	const projectIdSelected = $('#projectDisplayList').val()
+	console.log('project id', projectIdSelected, palettes[0].project_id);
+
+	palettes.forEach((palette, i) => {
+		if (palette.project_id == projectIdSelected) {
+			console.log('matched');
+			$('.project-container').append(`
+				<div class="palette-container" id="${palette.project_id}">
+          <h4 class="${palette.id}">${palette.palette_name}</h4>
+          <div class="palette-colors-container" id="paletteColors">
+            <div class="swatch ${palette.id}"></div>
+            <div class="swatch ${palette.id}"></div>
+            <div class="swatch ${palette.id}"></div>
+            <div class="swatch ${palette.id}"></div>
+            <div class="swatch ${palette.id}"></div>
+          </div>
+          <button class="delete-btn" id="deleteBtn"></button>
+        </div>`)
+
+				$(`.${palette.id}`).each((i, div) => {
+					$(div).css('background-color', palette[`palette_color${i}`])
+				})
+		}
+	})
+}
+
 const postPalette = () => {
 
 	const savedPalette = {
@@ -54,10 +81,24 @@ const postPalette = () => {
 
 	fetch('/api/palettes', {
 		method: 'POST',
-		body: JSON.stringify(palette),
+		body: JSON.stringify(savedPalette),
 		headers: {
 			'Content-Type': 'application/json'
 		}
+	})
+	.then(response => {
+		if (response.status !== 201){
+			console.log('bad response')
+			return false
+		}
+		return response.json()
+	})
+	.then(result => {
+		console.log('palette result', result);
+		appendPalette(result)
+	})
+	.catch(error => {
+		console.log(error)
 	})
 }
 
@@ -98,8 +139,6 @@ const populateColorObj = hexArray => {
 };
 
 const populateColorSwatch = () => {
-	// const paletteKeys = Object.keys(paletteObj);
-	console.log(palette);
 	$('.gen-color').each((i, swatch) => {
 		let color = palette[i];
 		$(swatch).css('background-color', color);
@@ -109,37 +148,21 @@ const populateColorSwatch = () => {
 	});
 };
 
-const appendPalettes = (projectId) => {
-  const projectKeys = Object.keys(project)
-  const projectDisplay = projectKeys.map((projectKey, i) => `<article class="project-container" id="projectContainer">
-    <h3>${projectKey}</h3>
-    <div class="palette-container" id="paletteContainer">
-      <h4>Palette Name</h4>
-      ${projects[projectKey].map()}
-      <div class="palette-colors-container" id="paletteColors">
-        <div class="palette-color" id="paletteColor"></div>
-        <div class="palette-color" id="paletteColor"></div>
-        <div class="palette-color" id="paletteColor"></div>
-        <div class="palette-color" id="paletteColor"></div>
-        <div class="palette-color" id="paletteColor"></div>
-      </div>
-      <button class="delete-btn" id="deleteBtn">Delete</button>
-    </div>
-  </article>`)
-
-  $('.project.display').append()
-};
+$('.submitPaletteBtn').on('click', (e) => {
+	e.preventDefault()
+	postPalette();
+})
 
 $('.generate-btn').on('click', () => {
 	populateColorSwatch(populateColorObj(generateHexValues(5)));
 });
 
-$('.submitProjectBtn').on('click', (e) => {
+$('.submitProjectBtn').on('submit', (e) => {
 	e.preventDefault();
 	postProject()
 })
 
-$('.submitPaletteBtn').on('click', (e) => {
+$('.submitPaletteBtn').on('submit', (e) => {
 	e.preventDefault();
 	postPalette()
 })

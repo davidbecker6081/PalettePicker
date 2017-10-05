@@ -70,7 +70,7 @@ h1 {
   width: 50px;
 }
 
-.palette-color1 {
+/*.palette-color1 {
   background-color: #8b6d17;
 }
 
@@ -88,6 +88,10 @@ h1 {
 
 .palette-color5 {
   background-color: #d6525b;
+}*/
+
+.project-display {
+  display: flex;
 }
 
 .delete-btn {
