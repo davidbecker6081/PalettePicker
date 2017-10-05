@@ -125,16 +125,23 @@ const generateHexValues = num => {
 	return hexValues;
 };
 
-const populateColorObj = hexArray => {
-	for (let i = 0; i < 5; i++) {
-		let isLocked = $(`.rando-color-${i + 1}`).children('div').hasClass('lock-img-locked')
+const populateColorObj = (hexArray, unlock = false) => {
+	if (!unlock) {
+		for (let i = 0; i < 5; i++) {
+			let isLocked = $(`.rando-color-${i + 1}`).children('div').hasClass('lock-img-locked')
 
-		if (!isLocked) {
+			if (!isLocked) {
+				palette.splice(i, 1, hexArray[i])
+			} else if (isLocked) {
+				palette.splice(i, 1, $(`.hexColor${i + 1}`).text())
+			} else {
+				palette.push(hexArray[i])
+			}
+		}
+	} else {
+		for (let i = 0; i < 5; i++) {
+			$(`.rando-color-${i + 1}`).children('div').removeClass('lock-img-locked')
 			palette.splice(i, 1, hexArray[i])
-		} else if (isLocked) {
-			palette.splice(i, 1, $(`.hexColor${i + 1}`).text())
-		} else {
-			palette.push(hexArray[i])
 		}
 	}
 };
@@ -202,7 +209,7 @@ $('.project-container').on('click', '.palette-container', (e) => {
 
 		return hexCodes
 	})
-	.then(hexCodes => populateColorSwatch(populateColorObj(hexCodes)))
+	.then(hexCodes => populateColorSwatch(populateColorObj(hexCodes, true)))
 	.catch(error => console.log(error))
 
 })
