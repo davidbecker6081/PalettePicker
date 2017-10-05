@@ -1,13 +1,5 @@
 const palette = [];
 
-$('.generate-btn').on('click', () => {
-	populateColorSwatch(populateColorObj(generateHexValues(5)));
-});
-
-$('.submitProjectBtn').on('click', (e) => {
-	e.preventDefault();
-	postProject()
-})
 
 const postProject = () => {
 	const name = $('.addProjectInput').val();
@@ -45,44 +37,85 @@ const getAllProjects = () => {
 const populateDropDowns = (projects) => {
 	$('.project-list').each((i, elemDisplay) => {
 		projects.forEach((elemProj) => {
-			$(elemDisplay).append(`<option value=${elemProj.project_Name} data-projectId=${elemProj.id}>${elemProj.project_Name}</option>`)
+			$(elemDisplay).append(`<option value=${elemProj.id}>${elemProj.project_Name}</option>`)
 		})
 	})
+}
 
-	// created_at: "2017-10-04T21:09:43.940Z"
-	// id: 6
-	// project_Name: "Dave"
-	// updated_at: "2017-10-04T21:09:43.940Z"
+const appendPalette = (palettes) => {
+	const projectIdSelected = $('#projectDisplayList').val()
+	console.log('project id', projectIdSelected, palettes[0].project_id);
+
+	palettes.forEach((palette, i) => {
+		if (palette.project_id == projectIdSelected) {
+			console.log('matched');
+			$('.project-container').append(`
+				<div class="palette-container" id="${palette.project_id}">
+          <h4>${palette.palette_name}</h4>
+          <div class="palette-colors-container" id="paletteColors">
+            <div class="swatch ${palette.id}"></div>
+            <div class="swatch ${palette.id}"></div>
+            <div class="swatch ${palette.id}"></div>
+            <div class="swatch ${palette.id}"></div>
+            <div class="swatch ${palette.id}"></div>
+          </div>
+          <button class="delete-btn" id="${palette.id}"></button>
+        </div>`)
+
+				$(`.${palette.id}`).each((i, div) => {
+					$(div).css('background-color', palette[`palette_color${i}`])
+				})
+		}
+	})
+}
+
+const postPalette = () => {
+
+	const savedPalette = {
+		projectId: $('#projectList').val(),
+		paletteName: $('.paletteNameInput').val(),
+		colors: palette
+	}
+
+	console.log('palette', savedPalette);
+
+	fetch('/api/palettes', {
+		method: 'POST',
+		body: JSON.stringify(savedPalette),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	})
+	.then(response => {
+		if (response.status !== 201){
+			console.log('bad response')
+			return false
+		}
+		return response.json()
+	})
+	.then(result => {
+		console.log('palette result', result);
+		appendPalette(result)
+	})
+	.catch(error => {
+		console.log(error)
+	})
 }
 
 
 $(document).ready(getAllProjects)
 
 $('.lock-img').on('click', e => {
-	// $(e.target).toggleClass('lock-img-locked')
 	toggleLock(e);
-	console.log('lock', palette);
 });
 
 const toggleLock = e => {
-	console.log(
-		$(e.target)
-			.parent('article')
-			.children('p')
-			.text(),
-	);
 	const hexValue = $(e.target)
 		.parent('article')
 		.children('p')
 		.text();
 
 	$(e.target).toggleClass('lock-img-locked');
-
-	palette.forEach(swatch => {
-		if (swatch.color === hexValue) {
-			swatch.locked = !swatch.locked;
-		}
-	});
 };
 
 const generateHexValues = num => {
@@ -95,33 +128,19 @@ const generateHexValues = num => {
 
 const populateColorObj = hexArray => {
 	for (let i = 0; i < 5; i++) {
-		let swatch = {
-			color: '',
-			locked: false,
-		};
-
-		if (palette.length === 5 && palette[i].locked) {
-			console.log(i);
-			swatch.color = palette[i].color;
-			swatch.locked = true;
-			palette.splice(i, 1, swatch);
-		} else if (palette.length === 5 && !palette[i].locked) {
-			swatch.color = hexArray[i];
-			palette.splice(i, 1, swatch);
+		if (!$(`.rando-color-${i + 1}`).children('div').hasClass('lock-img-locked')) {
+			palette.splice(i, 1, hexArray[i])
+		} else if ($(`.rando-color-${i + 1}`).children('div').hasClass('lock-img-locked')) {
+			palette.splice(i, 1, $(`.hexColor${i + 1}`).text())
 		} else {
-			swatch.color = hexArray[i];
-			palette.push(swatch);
+			palette.push(hexArray[i])
 		}
-
-		console.log(swatch);
 	}
 };
 
 const populateColorSwatch = () => {
-	// const paletteKeys = Object.keys(paletteObj);
-	console.log(palette);
 	$('.gen-color').each((i, swatch) => {
-		let color = palette[i].color;
+		let color = palette[i];
 		$(swatch).css('background-color', color);
 		$(swatch)
 			.children('p')
@@ -129,23 +148,53 @@ const populateColorSwatch = () => {
 	});
 };
 
-const appendPalettes = (projectId) => {
-  const projectKeys = Object.keys(project)
-  const projectDisplay = projectKeys.map((projectKey, i) => `<article class="project-container" id="projectContainer">
-    <h3>${projectKey}</h3>
-    <div class="palette-container" id="paletteContainer">
-      <h4>Palette Name</h4>
-      ${projects[projectKey].map()}
-      <div class="palette-colors-container" id="paletteColors">
-        <div class="palette-color" id="paletteColor"></div>
-        <div class="palette-color" id="paletteColor"></div>
-        <div class="palette-color" id="paletteColor"></div>
-        <div class="palette-color" id="paletteColor"></div>
-        <div class="palette-color" id="paletteColor"></div>
-      </div>
-      <button class="delete-btn" id="deleteBtn">Delete</button>
-    </div>
-  </article>`)
+const getAllPalettes = (projectId) => {
+	fetch(`/api/projects/${projectId}/palettes`)
+		.then(response => response.json())
+		.then(results => appendPalette(results))
+		.catch(error => console.log(error))
+}
 
-  $('.project.display').append()
-};
+const deletePalette = (paletteId) => {
+	fetch(`/api/palettes/${paletteId}`, {
+		method: 'DELETE',
+		body: JSON.stringify({paletteId}),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	})
+	.then(response => {
+		console.log(response.status)
+	})
+	.catch(error => console.log(error))
+}
+
+$('.project-container').on('click', '.delete-btn',  (e) => {
+	const paletteId = $(e.target).prop('id')
+	console.log(paletteId, 'paletteId');
+	$(e.target).parents('.palette-container').remove()
+	deletePalette(paletteId)
+})
+
+$('#projectDisplayList').on('change', () => {
+	const	projectId = $('#projectDisplayList').val()
+
+	$('.project-container').empty()
+	getAllPalettes(projectId)
+})
+
+$('.generate-btn').on('click', () => {
+	populateColorSwatch(populateColorObj(generateHexValues(5)));
+});
+
+$('.submitProjectBtn').on('click', (e) => {
+	e.preventDefault();
+	e.stopImmediatePropagation()
+	postProject()
+})
+
+$('.submitPaletteBtn').on('click', (e) => {
+	e.preventDefault();
+	e.stopImmediatePropagation()
+	postPalette()
+})
