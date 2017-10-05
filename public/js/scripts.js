@@ -1,6 +1,5 @@
 const palette = [];
 
-
 const postProject = () => {
 	const name = $('.addProjectInput').val();
 
@@ -128,9 +127,11 @@ const generateHexValues = num => {
 
 const populateColorObj = hexArray => {
 	for (let i = 0; i < 5; i++) {
-		if (!$(`.rando-color-${i + 1}`).children('div').hasClass('lock-img-locked')) {
+		let isLocked = $(`.rando-color-${i + 1}`).children('div').hasClass('lock-img-locked')
+
+		if (!isLocked) {
 			palette.splice(i, 1, hexArray[i])
-		} else if ($(`.rando-color-${i + 1}`).children('div').hasClass('lock-img-locked')) {
+		} else if (isLocked) {
 			palette.splice(i, 1, $(`.hexColor${i + 1}`).text())
 		} else {
 			palette.push(hexArray[i])
@@ -186,6 +187,25 @@ $('#projectDisplayList').on('change', () => {
 $('.generate-btn').on('click', () => {
 	populateColorSwatch(populateColorObj(generateHexValues(5)));
 });
+
+$('.project-container').on('click', '.palette-container', (e) => {
+	const paletteId = $(e.currentTarget).children('.delete-btn').prop('id')
+
+	fetch(`/api/palettes/${paletteId}`)
+	.then(response => response.json())
+	.then(results => {
+		let hexCodes = [];
+
+		for (let keys of ['palette_color1', 'palette_color2', 'palette_color3', 'palette_color4', 'palette_color5']) {
+			hexCodes.push(results[0][keys])
+		}
+
+		return hexCodes
+	})
+	.then(hexCodes => populateColorSwatch(populateColorObj(hexCodes)))
+	.catch(error => console.log(error))
+
+})
 
 $('.submitProjectBtn').on('click', (e) => {
 	e.preventDefault();

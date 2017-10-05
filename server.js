@@ -97,6 +97,28 @@ app.get('/api/projects/:id/palettes', (request, response) => {
     })
 })
 
+app.get('/api/palettes/:id', (request, response) => {
+  const { id } = request.params;
+
+  database('palettes')
+    .where('id', id)
+    .select()
+    .then(palettes => {
+      if (palettes.length === 0){
+        return response
+          .status(404)
+          .send({ error: `It doesnt seem like you have any palettes with that id :-(` })
+      }
+      return palettes
+    })
+    .then(palettes => {
+      response.status(200).json(palettes)
+    })
+    .catch(error => {
+      response.status(500).json({ error })
+    })
+})
+
 app.delete('/api/palettes/:id', (request, response) => {
   const { id } = request.params;
   // console.log('tag', request.params);
