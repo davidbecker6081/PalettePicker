@@ -77,8 +77,10 @@ app.get('/api/projects', (request, response) => {
     })
 })
 
-app.get('/api/palettes', (request, response) => {
-  database('palettes').select()
+app.get('/api/projects/:id/palettes', (request, response) => {
+  database('palettes')
+    .where('project_id', request.params.id)
+    .select()
     .then(palettes => {
       if (palettes.length === 0){
         return response

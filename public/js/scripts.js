@@ -51,7 +51,7 @@ const appendPalette = (palettes) => {
 			console.log('matched');
 			$('.project-container').append(`
 				<div class="palette-container" id="${palette.project_id}">
-          <h4 class="${palette.id}">${palette.palette_name}</h4>
+          <h4>${palette.palette_name}</h4>
           <div class="palette-colors-container" id="paletteColors">
             <div class="swatch ${palette.id}"></div>
             <div class="swatch ${palette.id}"></div>
@@ -59,7 +59,7 @@ const appendPalette = (palettes) => {
             <div class="swatch ${palette.id}"></div>
             <div class="swatch ${palette.id}"></div>
           </div>
-          <button class="delete-btn" id="deleteBtn"></button>
+          <button class="delete-btn" id="${palette.id}"></button>
         </div>`)
 
 				$(`.${palette.id}`).each((i, div) => {
@@ -148,21 +148,53 @@ const populateColorSwatch = () => {
 	});
 };
 
-$('.submitPaletteBtn').on('click', (e) => {
-	e.preventDefault()
-	postPalette();
+const getAllPalettes = (projectId) => {
+	fetch(`/api/projects/${projectId}/palettes`)
+		.then(response => response.json())
+		.then(results => appendPalette(results))
+		.catch(error => console.log(error))
+}
+
+const deletePalette = (paletteId) => {
+	fetch(`/api/palettes/${paletteId}`, {
+		method: 'DELETE',
+		body: JSON.stringify({paletteId}),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	})
+	.then(response => {
+		console.log(response.status)
+	})
+	.catch(error => console.log(error))
+}
+
+$('.project-container').on('click', '.delete-btn',  (e) => {
+	const paletteId = $(e.target).prop('id')
+	console.log(paletteId, 'paletteId');
+	$(e.target).parents('.palette-container').remove()
+	deletePalette(paletteId)
+})
+
+$('#projectDisplayList').on('change', () => {
+	const	projectId = $('#projectDisplayList').val()
+
+	$('.project-container').empty()
+	getAllPalettes(projectId)
 })
 
 $('.generate-btn').on('click', () => {
 	populateColorSwatch(populateColorObj(generateHexValues(5)));
 });
 
-$('.submitProjectBtn').on('submit', (e) => {
+$('.submitProjectBtn').on('click', (e) => {
 	e.preventDefault();
+	e.stopImmediatePropagation()
 	postProject()
 })
 
-$('.submitPaletteBtn').on('submit', (e) => {
+$('.submitPaletteBtn').on('click', (e) => {
 	e.preventDefault();
+	e.stopImmediatePropagation()
 	postPalette()
 })
