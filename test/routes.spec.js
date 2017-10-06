@@ -2,7 +2,7 @@ const chai = require('chai');
 const should = chai.should();
 const chaiHttp = require('chai-http');
 const server = require('../server');
-const environment = process.env.NODE_ENV || 'development';
+const environment = process.env.NODE_ENV || 'test';
 const configuration = require('../knexfile')[environment];
 const database = require('knex')(configuration);
 
@@ -71,6 +71,15 @@ describe('API Routes', () => {
 					done();
 				});
 		});
+
+    it('should return a 404 error if the endpoint is wrong', (done) => {
+      chai.request(server)
+        .get('/api/proj')
+        .end((error, response) => {
+          response.should.have.status(404);
+          done()
+        })
+    })
 	});
 });
 

@@ -70,6 +70,9 @@ app.post('/api/palettes', (request, response) => {
 app.get('/api/projects', (request, response) => {
   database('projects').select().orderBy('id')
     .then(projects => {
+      if (!projects) {
+        return response.status(404)
+      }
       response.status(200).json(projects)
     })
     .catch(error => {
