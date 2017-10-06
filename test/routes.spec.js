@@ -81,6 +81,25 @@ describe('API Routes', () => {
         })
     })
 	});
+
+  describe('GET /api/projects/:id/palettes', () => {
+    it('should return all of the palettes for a specific project', (done) => {
+      chai.request(server)
+        .get('/api/projects/1/palettes')
+        .end((error, response) => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(2);
+          response.body[0].should.have.property('palette_name');
+          response.body[0].should.have.property('palette_color1');
+          response.body[0].should.have.property('project_id');
+          response.body.filter(palette => palette.palette_name === 'Travis').length.should.equal(1);
+          response.body.filter(palette => palette.palette_name === 'Travis2').length.should.equal(1);
+          done();
+        })
+    })
+  })
 });
 
 // after(() => {
