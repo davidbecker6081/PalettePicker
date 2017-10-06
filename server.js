@@ -26,7 +26,7 @@ app.post('/api/projects', (request, response) => {
 
   database('projects').insert({ project_Name: projectName }, '*')
     .then(project => {
-    response.status(201).json(project)
+    return response.status(201).json(project)
     })
     .catch(error => {
       response.status(500).json({ error })
@@ -105,15 +105,15 @@ app.get('/api/palettes/:id', (request, response) => {
     .where('id', id)
     .select()
     .then(palettes => {
-      if (palettes.length === 0){
-        return response
-          .status(404)
-          .send({ error: `It doesnt seem like you have any palettes with that id :-(` })
+      if (palettes.length === 0) {
+        console.log(palettes);
+        return response.status(404)
+          // .send({ error: `It doesnt seem like you have any palettes with that id :-(` })
       }
       return palettes
     })
     .then(palettes => {
-      response.status(200).json(palettes)
+      return response.status(200).json(palettes)
     })
     .catch(error => {
       response.status(500).json({ error })
