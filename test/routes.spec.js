@@ -203,7 +203,37 @@ describe('API Routes', () => {
           done();
         })
     })
+
+    it('should return a 422 error if palette is missing info', (done) => {
+      chai.request(server)
+        .post('/api/palettes')
+        .send({
+          paletteName: 'Palette1'
+        })
+        .end((error, response) => {
+          response.should.have.status(422);
+          response.body.error.should.equal('Expected format: { projectId: <Integer>, paletteName: <String>, colors: <Array>. You\'re missing a colors projectId property.')
+          done();
+        })
+    })
+
+    it.skip('should return a 422 error if palette colors are not equal to 5', (done) => {
+      chai.request(server)
+        .post('/api/palettes')
+        .send({
+          paletteName: 'FunPalette2',
+          colors: ['#FFFFFF', '#000000', '#FFFFFF', '#000000'],
+          projectId: 1
+        })
+        .end((error, response) => {
+          response.should.have.status(422);
+          response.body.error.should.equal('Expected format: { projectId: <Integer>, paletteName: <String>, colors: <Array>. You\'re missing a color or two.')
+          done();
+        })
+    })
   })
+
+  describe('DELETE')
 });
 
 // after(() => {

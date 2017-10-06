@@ -35,15 +35,6 @@ app.post('/api/projects', (request, response) => {
 
 app.post('/api/palettes', (request, response) => {
   const { projectId, paletteName, colors } = request.body;
-  const insertObj = {
-    palette_name: paletteName,
-    palette_color1: colors[0],
-    palette_color2: colors[1],
-    palette_color3: colors[2],
-    palette_color4: colors[3],
-    palette_color5: colors[4],
-    project_id: projectId
-  }
 
   for (let requiredParams of ['paletteName', 'colors', 'projectId']) {
     if (!request.body[requiredParams]) {
@@ -54,16 +45,27 @@ app.post('/api/palettes', (request, response) => {
       return response
         .status(422)
         .send({ error: `Expected format: { projectId: <Integer>, paletteName: <String>, colors: <Array>. You're missing a color or two.` })
+    } else {
+      const insertObj = {
+        palette_name: paletteName,
+        palette_color1: colors[0],
+        palette_color2: colors[1],
+        palette_color3: colors[2],
+        palette_color4: colors[3],
+        palette_color5: colors[4],
+        project_id: projectId
+      }
+
+      database('palettes').insert(insertObj, '*')
+      .then(project => {
+        response.status(201).json(project)
+      })
+      .catch(error => {
+        response.status(500).json({ error })
+      })
     }
   }
 
-  database('palettes').insert(insertObj, '*')
-    .then(project => {
-      response.status(201).json(project)
-    })
-    .catch(error => {
-      response.status(500).json({ error })
-    })
 
 })
 
