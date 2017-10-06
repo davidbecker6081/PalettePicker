@@ -24,6 +24,10 @@ h2 {
   text-align: center;
 }
 
+h4 {
+  margin-bottom: 5px;
+}
+
 form {
   display: flex;
   align-items: center;
@@ -140,6 +144,19 @@ select {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
+}
+
+.palette-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-right: 20px;
+}
+
+.palette-colors-container {
+  border: 1px solid gray;
 }
 
 .delete-btn {
@@ -162,6 +179,7 @@ select {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .palette-container:hover {

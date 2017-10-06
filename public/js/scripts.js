@@ -63,7 +63,7 @@ const appendPalette = (palettes) => {
         </div>`)
 
 				$(`.${palette.id}`).each((i, div) => {
-					$(div).css('background-color', palette[`palette_color${i}`])
+						$(div).css('background-color', palette[`palette_color${i + 1}`])
 				})
 		}
 	})
