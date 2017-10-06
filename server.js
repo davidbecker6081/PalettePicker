@@ -1,8 +1,13 @@
 //require modules in order to connect server file to database through knex
+//express allows us tools to create endpoints
+//app is the instance of express
 const express = require('express');
 const app = express();
+//body parser gives ability to read json objects
 const bodyParser = require('body-parser');
 const path = require('path');
+//this section connects our environment, which would be development as default, to
+//our database through the middleware knex
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
@@ -57,7 +62,7 @@ app.post('/api/palettes', (request, response) => {
 
 //looping through the elements in the array given and checking if request body does not contain those keys
   for (let requiredParams of ['paletteName', 'colors', 'projectId']) {
-    if (!request.body[requiredParams]) {
+    if (!request.body[requiredParams]) { 
       //if a key is not found, return a status of 422 and an error message
       return response
         .status(422)
