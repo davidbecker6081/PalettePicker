@@ -40,7 +40,8 @@ describe('Client Routes', () => {
 
 describe('API Routes', () => {
 
-  beforeEach(done => { knex.seed.run() })
+  beforeEach(done => {
+    knex.seed.run()
     .then(() => { done() })
     .catch(error => {
       console.log(error)
