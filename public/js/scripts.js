@@ -1,5 +1,64 @@
 const palette = [];
 
+// fetch calls
+
+const deletePalette = (paletteId) => {
+	fetch(`/api/palettes/${paletteId}`, {
+		method: 'DELETE',
+		body: JSON.stringify({paletteId}),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	})
+	.then(response => {
+		console.log(response.status)
+	})
+	.catch(error => console.log(error))
+}
+
+const getAllPalettes = (projectId) => {
+	fetch(`/api/projects/${projectId}/palettes`)
+		.then(response => response.json())
+		.then(results => appendPalette(results))
+		.catch(error => console.log(error))
+}
+
+const getAllProjects = () => {
+	fetch('/api/projects')
+	.then(response => response.json())
+	.then(results => populateDropDowns(results))
+	.catch(error => console.log(error))
+}
+
+const postPalette = () => {
+
+	const savedPalette = {
+		projectId: $('#projectList').val(),
+		paletteName: $('.palette-name-input').val(),
+		colors: palette
+	}
+
+	fetch('/api/palettes', {
+		method: 'POST',
+		body: JSON.stringify(savedPalette),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	})
+	.then(response => {
+		if (response.status !== 201){
+			return false
+		}
+		return response.json()
+	})
+	.then(result => {
+		appendPalette(result)
+	})
+	.catch(error => {
+		console.log(error)
+	})
+}
+
 const postProject = () => {
 	const name = $('.addProjectInput').val();
 
@@ -12,13 +71,11 @@ const postProject = () => {
 	})
 	.then(response => {
 		if (response.status !== 201){
-			console.log('bad response')
 			return false
 		}
 		return response.json()
 	})
 	.then(result => {
-		console.log(result);
 		populateDropDowns(result)
 	})
 	.catch(error => {
@@ -26,30 +83,14 @@ const postProject = () => {
 	})
 }
 
-const getAllProjects = () => {
-	fetch('/api/projects')
-	.then(response => response.json())
-	.then(results => populateDropDowns(results))
-	.catch(error => console.log(error))
-}
-
-const populateDropDowns = (projects) => {
-	$('.project-list').each((i, elemDisplay) => {
-		projects.forEach((elemProj) => {
-			$(elemDisplay).append(`<option value=${elemProj.id}>${elemProj.project_Name}</option>`)
-		})
-	})
-}
+//UI manipulation
 
 const appendPalette = (palettes) => {
 	const projectIdSelected = $('#projectDisplayList').val()
-	console.log('project id', projectIdSelected, palettes[0].project_id);
-	console.log('in append', palettes);
 
 	palettes.forEach((palette, i) => {
 		if (palette.project_id == projectIdSelected) {
-			console.log('matched');
-			$('.project-container').append(`
+		$('.project-container').append(`
 				<div class="palette-container" id="${palette.project_id}">
           <h4>${palette.palette_name}</h4>
           <div class="palette-colors-container" id="paletteColors">
@@ -69,52 +110,6 @@ const appendPalette = (palettes) => {
 	})
 }
 
-const postPalette = () => {
-
-	const savedPalette = {
-		projectId: $('#projectList').val(),
-		paletteName: $('.palette-name-input').val(),
-		colors: palette
-	}
-
-	console.log('palette', savedPalette);
-
-	fetch('/api/palettes', {
-		method: 'POST',
-		body: JSON.stringify(savedPalette),
-		headers: {
-			'Content-Type': 'application/json'
-		}
-	})
-	.then(response => {
-		if (response.status !== 201){
-			console.log('bad response')
-			return false
-		}
-		return response.json()
-	})
-	.then(result => {
-		console.log('palette result', result);
-		appendPalette(result)
-	})
-	.catch(error => {
-		console.log(error)
-	})
-}
-
-$('.lock-img').on('click', e => {
-	toggleLock(e);
-});
-
-const toggleLock = e => {
-	const hexValue = $(e.target)
-		.parent('article')
-		.children('p')
-		.text();
-
-	$(e.target).toggleClass('lock-img-locked');
-};
-
 const generateHexValues = num => {
 	let hexValues = [];
 	for (let i = 0; i < num; i++) {
@@ -122,6 +117,7 @@ const generateHexValues = num => {
 	}
 	return hexValues;
 };
+
 
 const populateColorObj = (hexArray, unlock = false) => {
 	if (!unlock) {
@@ -149,59 +145,56 @@ const populateColorSwatch = () => {
 		let color = palette[i];
 		$(swatch).css('background-color', color);
 		$(swatch)
-			.children('p')
-			.text(color);
+		.children('p')
+		.text(color);
 	});
 };
 
-const getAllPalettes = (projectId) => {
-	fetch(`/api/projects/${projectId}/palettes`)
-		.then(response => response.json())
-		.then(results => appendPalette(results))
-		.catch(error => console.log(error))
+const populateDropDowns = (projects) => {
+	$('.project-list').each((i, elemDisplay) => {
+		projects.forEach((elemProj) => {
+			$(elemDisplay).append(`<option value=${elemProj.id}>${elemProj.project_Name}</option>`)
+		})
+	})
 }
 
-const deletePalette = (paletteId) => {
-	fetch(`/api/palettes/${paletteId}`, {
-		method: 'DELETE',
-		body: JSON.stringify({paletteId}),
-		headers: {
-			'Content-Type': 'application/json'
-		}
-	})
-	.then(response => {
-		console.log(response.status)
-	})
-	.catch(error => console.log(error))
-}
+const toggleLock = e => {
+	const hexValue = $(e.target)
+		.parent('article')
+		.children('p')
+		.text();
+
+	$(e.target).toggleClass('lock-img-locked');
+};
+
+//Event Listeners
 
 $(document).ready(() => {
 	populateColorSwatch(populateColorObj(generateHexValues(5)));
 	getAllProjects()
 })
 
-$('.project-container').on('click', '.delete-btn',  (e) => {
-	const paletteId = $(e.target).prop('id')
-	console.log(paletteId, 'paletteId');
-	$(e.target).parents('.palette-container').remove()
-	deletePalette(paletteId)
+$('.addProjectInput').on('keyup', (e) => {
+	$(e.target).val() ? $('.submitProjectBtn').prop('disabled', false) : $('.submitProjectBtn').prop('disabled', true)
 })
 
-$('#projectDisplayList').on('change', () => {
-	const	projectId = $('#projectDisplayList').val()
-
-	$('.project-container').empty()
-	getAllPalettes(projectId)
-})
+$('.lock-img').on('click', e => {
+	toggleLock(e);
+});
 
 $('.generate-btn').on('click', () => {
 	populateColorSwatch(populateColorObj(generateHexValues(5)));
 });
 
+$('.project-container').on('click', '.delete-btn',  (e) => {
+	const paletteId = $(e.target).prop('id');
+
+	$(e.target).parents('.palette-container').remove()
+	deletePalette(paletteId)
+})
+
 $('.project-container').on('click', '.palette-colors-container', (e) => {
 	const paletteId = $(e.target).parents('.palette-container').children('.delete-btn').prop('id')
-
-	console.log(paletteId);
 
 	fetch(`/api/palettes/${paletteId}`)
 	.then(response => response.json())
@@ -217,6 +210,22 @@ $('.project-container').on('click', '.palette-colors-container', (e) => {
 	.then(hexCodes => populateColorSwatch(populateColorObj(hexCodes, true)))
 	.catch(error => console.log(error))
 
+	$(window).scrollTop(0);
+})
+
+$('.palette-name-input').on('keyup', (e) => {
+	$(e.target).val() && $('#projectList').val() ? $('.submitPaletteBtn').prop('disabled', false) : $('.submitPaletteBtn').prop('disabled', true)
+})
+
+$('#projectDisplayList').on('change', () => {
+	const	projectId = $('#projectDisplayList').val()
+
+	$('.project-container').empty()
+	getAllPalettes(projectId)
+})
+
+$('#projectList').on('change', (e) => {
+	$(e.target).val() && $('.palette-name-input').val() ? $('.submitPaletteBtn').prop('disabled', false) : $('.submitPaletteBtn').prop('disabled', true)
 })
 
 $('.submitProjectBtn').on('click', (e) => {
@@ -229,16 +238,4 @@ $('.submitPaletteBtn').on('click', (e) => {
 	e.preventDefault();
 	e.stopImmediatePropagation()
 	postPalette()
-})
-
-$('.palette-name-input').on('keyup', (e) => {
-	$(e.target).val() && $('#projectList').val() ? $('.submitPaletteBtn').prop('disabled', false) : $('.submitPaletteBtn').prop('disabled', true)
-})
-
-$('#projectList').on('change', (e) => {
-	$(e.target).val() && $('.palette-name-input').val() ? $('.submitPaletteBtn').prop('disabled', false) : $('.submitPaletteBtn').prop('disabled', true)
-})
-
-$('.addProjectInput').on('keyup', (e) => {
-	$(e.target).val() ? $('.submitProjectBtn').prop('disabled', false) : $('.submitProjectBtn').prop('disabled', true)
 })
