@@ -101,9 +101,6 @@ const postPalette = () => {
 	})
 }
 
-
-$(document).ready(getAllProjects)
-
 $('.lock-img').on('click', e => {
 	toggleLock(e);
 });
@@ -176,6 +173,11 @@ const deletePalette = (paletteId) => {
 	})
 	.catch(error => console.log(error))
 }
+
+$(document).ready(() => {
+	populateColorSwatch(populateColorObj(generateHexValues(5)));
+	getAllProjects()
+})
 
 $('.project-container').on('click', '.delete-btn',  (e) => {
 	const paletteId = $(e.target).prop('id')
