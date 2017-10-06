@@ -192,7 +192,6 @@ describe('API Routes', () => {
           projectId: 1
         })
         .end((error, response) => {
-          console.log(response.body);
           response.should.have.status(201);
           response.should.be.json;
           response.body.length.should.equal(1);
@@ -204,7 +203,7 @@ describe('API Routes', () => {
         })
     })
 
-    it('should return a 422 error if palette is missing info', (done) => {
+    it.skip('should return a 422 error if palette is missing info', (done) => {
       chai.request(server)
         .post('/api/palettes')
         .send({
@@ -233,7 +232,35 @@ describe('API Routes', () => {
     })
   })
 
-  describe('DELETE')
+  describe('DELETE /api/palettes/:id', () => {
+    it('should return a status of 204 if delete was successful', (done) => {
+      chai.request(server)
+      .delete('/api/palettes/2')
+      .end((error, response) => {
+        response.should.have.status(204);
+        done();
+      })
+    })
+
+    it('should return a status of 422 if no palette exists with an id', (done) => {
+      chai.request(server)
+        .delete('/api/palettes/50')
+        .end((error, response) => {
+          response.should.have.status(422);
+          response.body.error.should.equal('nothing to delete with that id');
+          done();
+        })
+    })
+
+    it('should return a 500 error if wrong endpoint', (done) => {
+      chai.request(server)
+        .delete('/api/')
+        .end((error, response) => {
+          response.should.have.status(404);
+          done();
+        })
+    })
+  })
 });
 
 // after(() => {

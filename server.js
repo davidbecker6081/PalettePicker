@@ -58,7 +58,7 @@ app.post('/api/palettes', (request, response) => {
 
       database('palettes').insert(insertObj, '*')
       .then(project => {
-        response.status(201).json(project)
+        return response.status(201).json(project)
       })
       .catch(error => {
         response.status(500).json({ error })
@@ -108,7 +108,6 @@ app.get('/api/palettes/:id', (request, response) => {
     .select()
     .then(palettes => {
       if (palettes.length === 0) {
-        console.log(palettes);
         return response.status(404)
           // .send({ error: `It doesnt seem like you have any palettes with that id :-(` })
       }
@@ -124,20 +123,12 @@ app.get('/api/palettes/:id', (request, response) => {
 
 app.delete('/api/palettes/:id', (request, response) => {
   const { id } = request.params;
-  // console.log('tag', request.params);
-  //
-  // if (!request.params){
-  //   console.log('error');
-  //   return response
-  //     .status(422)
-  //     .send({ error: `It doesnt seem like you have any palettes with that id :-(` })
-  // }
 
   database('palettes')
     .where('id', id)
     .del()
     .then((length) => {
-      length
+      return length
         ? response.sendStatus(204)
         : response.status(422).send({ error: 'nothing to delete with that id' })
     })
