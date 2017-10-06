@@ -14,29 +14,39 @@ app.set('port', process.env.PORT || 3000);
 app.locals.title = 'Palette Picker';
 
 app.post('/api/projects', (request, response) => {
-  const { projectName } = request.body;
+	const { projectName } = request.body;
 
-  for (let keys of ['projectName']) {
-    if (!request.body[keys]) {
-      return response
-        .status(422)
-        .send({ error: `Expected format: { projectName: <String>. You're missing a ${keys} property.`})
-    }
-  }
+	for (let keys of ['projectName']) {
+		if (!request.body[keys]) {
+			return response.status(422).send({
+				error: `Expected format: { projectName: <String>. You're missing a ${keys} property.`,
+			});
+		}
+	}
 
-  database('projects').insert({ project_Name: projectName }, '*')
-    .then(project => {
-    return response.status(201).json(project)
-    })
-    .catch(error => {
-      response.status(500).json({ error })
-    })
-})
+	database('projects')
+		.insert({ project_Name: projectName }, '*')
+		.then(project => {
+			response.status(201).json(project);
+		})
+		.catch(error => {
+			response.status(500).json({ error });
+		});
+});
 
 app.post('/api/palettes', (request, response) => {
-  const { projectId, paletteName, colors } = request.body;
+	const { projectId, paletteName, colors } = request.body;
+	const insertObj = {
+		palette_name: paletteName,
+		palette_color1: colors[0],
+		palette_color2: colors[1],
+		palette_color3: colors[2],
+		palette_color4: colors[3],
+		palette_color5: colors[4],
+		project_id: projectId,
+	};
 
-  for (let requiredParams of ['paletteName', 'colors', 'projectId']) {
+	for (let requiredParams of ['paletteName', 'colors', 'projectId']) {
     if (!request.body[requiredParams]) {
       return response
         .status(422)
@@ -45,97 +55,90 @@ app.post('/api/palettes', (request, response) => {
       return response
         .status(422)
         .send({ error: `Expected format: { projectId: <Integer>, paletteName: <String>, colors: <Array>. You're missing a color or two.` })
-    } else {
-      const insertObj = {
-        palette_name: paletteName,
-        palette_color1: colors[0],
-        palette_color2: colors[1],
-        palette_color3: colors[2],
-        palette_color4: colors[3],
-        palette_color5: colors[4],
-        project_id: projectId
-      }
-
-      database('palettes').insert(insertObj, '*')
-      .then(project => {
-        return response.status(201).json(project)
-      })
-      .catch(error => {
-        response.status(500).json({ error })
-      })
     }
   }
 
-
-})
+  database('palettes').insert(insertObj, '*')
+    .then(project => {
+      response.status(201).json(project)
+    })
+    .catch(error => {
+      response.status(500).json({ error })
+    })
+});
 
 app.get('/api/projects', (request, response) => {
-  database('projects').select().orderBy('id')
-    .then(projects => {
-      if (!projects) {
-        return response.status(404)
-      }
-      response.status(200).json(projects)
-    })
-    .catch(error => {
-      response.status(500).json({ error })
-    })
-})
+	database('projects')
+		.select()
+		.then(projects => {
+			if (!projects) {
+				response.status(404);
+			}
+			response.status(200).json(projects);
+		})
+		.catch(error => {
+			response.status(500).json({ error });
+		});
+});
 
 app.get('/api/projects/:id/palettes', (request, response) => {
-  database('palettes')
-    .where('project_id', request.params.id)
-    .select()
-    .then(palettes => {
+	database('palettes')
+		.where('project_id', request.params.id)
+		.select()
+		.then(palettes => {
       if (palettes.length === 0){
-        return response.sendStatus(404)
-      }
-      return response.status(200).json(palettes)
-    })
-    // .then(palettes => {
-    //   response.status(200).json(palettes)
-    // })
-    .catch(error => {
-      response.status(500).json({ error })
-    })
-})
-
-app.get('/api/palettes/:id', (request, response) => {
-  const { id } = request.params;
-
-  database('palettes')
-    .where('id', id)
-    .select()
-    .then(palettes => {
-      if (palettes.length === 0) {
-        return response.status(404)
-          // .send({ error: `It doesnt seem like you have any palettes with that id :-(` })
+        return response
+          .status(404)
+          .send({ error: `It doesnt seem like you have any palettes in that project :-(` })
       }
       return palettes
     })
     .then(palettes => {
-      return response.status(200).json(palettes)
+      response.status(200).json(palettes)
     })
-    .catch(error => {
-      response.status(500).json({ error })
-    })
-})
+		.catch(error => {
+			response.status(500).json({ error });
+		});
+});
+
+app.get('/api/palettes/:id', (request, response) => {
+	const { id } = request.params;
+
+	database('palettes')
+		.where('id', id)
+		.select()
+		.then(palettes => {
+			if (palettes.length === 0) {
+				return response.status(404);
+				// .send({ error: `It doesnt seem like you have any palettes with that id :-(` })
+			}
+			return palettes;
+		})
+		.then(palettes => {
+			response.status(200).json(palettes);
+		})
+		.catch(error => {
+			response.status(500).json({ error });
+		});
+});
 
 app.delete('/api/palettes/:id', (request, response) => {
-  const { id } = request.params;
+	const { id } = request.params;
 
-  database('palettes')
-    .where('id', id)
-    .del()
-    .then((length) => {
-      return length
-        ? response.sendStatus(204)
-        : response.status(422).send({ error: 'nothing to delete with that id' })
-    })
-    .catch(error => {
-      response.status(500).json({ error })
-    })
-})
+	database('palettes')
+		.where('id', id)
+		.del()
+		.then(length => {
+			length
+				? response.sendStatus(204)
+				: response
+						.status(422)
+						.send({ error: 'nothing to delete with that id' });
+		})
+		.catch(error => {
+			response.status(500).json({ error });
+		});
+});
 
 app.listen(app.get('port'), () => {
 	console.log(`${app.locals.title} is running on ${app.get('port')}.`);

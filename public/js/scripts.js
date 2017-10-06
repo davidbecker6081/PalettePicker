@@ -44,6 +44,7 @@ const populateDropDowns = (projects) => {
 const appendPalette = (palettes) => {
 	const projectIdSelected = $('#projectDisplayList').val()
 	console.log('project id', projectIdSelected, palettes[0].project_id);
+	console.log('in append', palettes);
 
 	palettes.forEach((palette, i) => {
 		if (palette.project_id == projectIdSelected) {
