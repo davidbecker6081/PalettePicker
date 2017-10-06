@@ -23,5 +23,10 @@
   "bugs": {
     "url": "https://github.com/davidbecker6081/PalettePicker/issues"
   },
-  "homepage": "https://github.com/davidbecker6081/PalettePicker#readme"
+  "homepage": "https://github.com/davidbecker6081/PalettePicker#readme",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-http": "^3.0.0",
+    "mocha": "^4.0.0"
+  }
 }
