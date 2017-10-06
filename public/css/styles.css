@@ -11,11 +11,28 @@ main {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  border: 2px solid black;
+  margin-bottom: 20px;
+  box-shadow: 1px 1px 10px black;
 }
 
 h1 {
   font-weight: 700;
+}
+
+h2 {
+  margin: 0 0 5px 0;
+  text-align: center;
+}
+
+h4 {
+  margin-bottom: 5px;
+}
+
+form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
 .generate-container {
@@ -70,28 +87,76 @@ h1 {
   width: 50px;
 }
 
-/*.palette-color1 {
-  background-color: #8b6d17;
+.generate-btn,
+.submitPaletteBtn,
+.submitProjectBtn {
+  background: none;
+  border: none;
+  box-shadow: 1px 1px 5px black;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 10px;
+  outline-style: none;
 }
 
-.palette-color2 {
-  background-color: #c9d813;
+.submitPaletteBtn,
+.submitProjectBtn {
+  font-size: 13px;
+  padding: 6px;
 }
 
-.palette-color3 {
-  background-color: #5ff649;
+.generate-btn:hover,
+.submitPaletteBtn:hover,
+.submitProjectBtn:hover {
+  background-color: rgba(0,0,0,0.1);
 }
 
-.palette-color4 {
-  background-color: #12de24;
+.generate-btn:active,
+.submitPaletteBtn:active,
+.submitProjectBtn:active {
+  box-shadow: 1px 1px 3px grey;
+  position: relative;
+  top: 1px;
+  transition: 1s;
 }
 
-.palette-color5 {
-  background-color: #d6525b;
-}*/
+.generate-btn:disabled,
+.submitPaletteBtn:disabled,
+.submitProjectBtn:disabled {
+  color: gray;
+}
+
+.palette-name-input,
+.addProjectInput {
+  margin-right: 5px;
+  font-size: 13px;
+  padding: 6px;
+}
+
+select {
+  border: 0;
+  box-shadow: 1px 1px 5px black;
+  margin-right: 20px;
+}
 
 .project-display {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.palette-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-right: 20px;
+}
+
+.palette-colors-container {
+  border: 1px solid gray;
 }
 
 .delete-btn {
@@ -110,6 +175,14 @@ h1 {
   transform: scale(1.1);
 }
 
+.project-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
 .palette-container:hover {
-  
+  cursor: pointer;
+  opacity: 0.8;
 }

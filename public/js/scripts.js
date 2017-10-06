@@ -44,6 +44,7 @@ const populateDropDowns = (projects) => {
 const appendPalette = (palettes) => {
 	const projectIdSelected = $('#projectDisplayList').val()
 	console.log('project id', projectIdSelected, palettes[0].project_id);
+	console.log('in append', palettes);
 
 	palettes.forEach((palette, i) => {
 		if (palette.project_id == projectIdSelected) {
@@ -62,7 +63,7 @@ const appendPalette = (palettes) => {
         </div>`)
 
 				$(`.${palette.id}`).each((i, div) => {
-					$(div).css('background-color', palette[`palette_color${i}`])
+						$(div).css('background-color', palette[`palette_color${i + 1}`])
 				})
 		}
 	})
@@ -72,7 +73,7 @@ const postPalette = () => {
 
 	const savedPalette = {
 		projectId: $('#projectList').val(),
-		paletteName: $('.paletteNameInput').val(),
+		paletteName: $('.palette-name-input').val(),
 		colors: palette
 	}
 
@@ -100,9 +101,6 @@ const postPalette = () => {
 		console.log(error)
 	})
 }
-
-
-$(document).ready(getAllProjects)
 
 $('.lock-img').on('click', e => {
 	toggleLock(e);
@@ -177,6 +175,11 @@ const deletePalette = (paletteId) => {
 	.catch(error => console.log(error))
 }
 
+$(document).ready(() => {
+	populateColorSwatch(populateColorObj(generateHexValues(5)));
+	getAllProjects()
+})
+
 $('.project-container').on('click', '.delete-btn',  (e) => {
 	const paletteId = $(e.target).prop('id')
 	console.log(paletteId, 'paletteId');
@@ -226,4 +229,16 @@ $('.submitPaletteBtn').on('click', (e) => {
 	e.preventDefault();
 	e.stopImmediatePropagation()
 	postPalette()
+})
+
+$('.palette-name-input').on('keyup', (e) => {
+	$(e.target).val() && $('#projectList').val() ? $('.submitPaletteBtn').prop('disabled', false) : $('.submitPaletteBtn').prop('disabled', true)
+})
+
+$('#projectList').on('change', (e) => {
+	$(e.target).val() && $('.palette-name-input').val() ? $('.submitPaletteBtn').prop('disabled', false) : $('.submitPaletteBtn').prop('disabled', true)
+})
+
+$('.addProjectInput').on('keyup', (e) => {
+	$(e.target).val() ? $('.submitProjectBtn').prop('disabled', false) : $('.submitProjectBtn').prop('disabled', true)
 })
