@@ -3,6 +3,7 @@ let projectsData = [{
   id: 1,
   palettes: [
     {
+      id: 1,
       palette_name: 'Travis',
       palette_color1: '#FFFFFF',
       palette_color2: '#FFFFFF',
@@ -12,6 +13,7 @@ let projectsData = [{
       project_id: 1
     },
     {
+      id: 2,
       palette_name: 'Travis2',
       palette_color1: '#000000',
       palette_color2: '#FFFFFF',
@@ -27,6 +29,7 @@ let projectsData = [{
   id: 2,
   palettes: [
     {
+      id: 3,
       palette_name: 'Dave',
       palette_color1: '#FF4F6F',
       palette_color2: '#F7AAF7',
@@ -36,6 +39,11 @@ let projectsData = [{
       project_id: 2
     }
   ]
+},
+{
+  project_Name: 'Project3',
+  id: 3,
+  palettes: []
 }
 ]
 
