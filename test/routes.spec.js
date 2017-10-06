@@ -8,17 +8,10 @@ chai.use(chaiHttp);
 
 before(done => {
 	// Run migrations and seeds for test database
-
-	knex.migrate.rollback()
-    .then(() => {
-		    knex.migrate.latest()
-          .then(() => {
-			         return knex.seed.run()
-                .then(() => {
-			done();
-			});
-		});
-	});
+knex.migrate.latest()
+    .then(() => { knex.seed.run() })
+    .then(() => { done() })
+    .catch(error => { console.log(error) })
 });
 
 describe('Client Routes', () => {
@@ -47,10 +40,11 @@ describe('Client Routes', () => {
 
 describe('API Routes', () => {
 
-  beforeEach(done => {
-    knex.seed.run().then(function() {
-    done();
-    });
+  beforeEach(done => { knex.seed.run() })
+    .then(() => { done() })
+    .catch(error => {
+      console.log(error)
+    })
   });
 
 	describe('GET /api/projects', () => {
