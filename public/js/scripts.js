@@ -72,7 +72,7 @@ const postPalette = () => {
 
 	const savedPalette = {
 		projectId: $('#projectList').val(),
-		paletteName: $('.paletteNameInput').val(),
+		paletteName: $('.palette-name-input').val(),
 		colors: palette
 	}
 
@@ -228,4 +228,16 @@ $('.submitPaletteBtn').on('click', (e) => {
 	e.preventDefault();
 	e.stopImmediatePropagation()
 	postPalette()
+})
+
+$('.palette-name-input').on('keyup', (e) => {
+	$(e.target).val() && $('#projectList').val() ? $('.submitPaletteBtn').prop('disabled', false) : $('.submitPaletteBtn').prop('disabled', true)
+})
+
+$('#projectList').on('change', (e) => {
+	$(e.target).val() && $('.palette-name-input').val() ? $('.submitPaletteBtn').prop('disabled', false) : $('.submitPaletteBtn').prop('disabled', true)
+})
+
+$('.addProjectInput').on('keyup', (e) => {
+	$(e.target).val() ? $('.submitProjectBtn').prop('disabled', false) : $('.submitProjectBtn').prop('disabled', true)
 })
