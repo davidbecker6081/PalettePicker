@@ -26,7 +26,7 @@ app.post('/api/projects', (request, response) => {
 
   database('projects').insert({ project_Name: projectName }, '*')
     .then(project => {
-      response.status(201).json(project)
+    response.status(201).json(project)
     })
     .catch(error => {
       response.status(500).json({ error })
@@ -68,7 +68,7 @@ app.post('/api/palettes', (request, response) => {
 })
 
 app.get('/api/projects', (request, response) => {
-  database('projects').select()
+  database('projects').select().orderBy('id')
     .then(projects => {
       response.status(200).json(projects)
     })
