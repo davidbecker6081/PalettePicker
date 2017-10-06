@@ -2,15 +2,16 @@
 
 The goal of this project was to build a simple backend with NodeJS/Express in order to be able to save color palettes under a created project folder. Some of the specs for the project included being able to create a new project, save a palette to that project, lock colors in the generate new colors, and delete a palette. This project is also deployed to [Heroku](https://david-palette-picker.herokuapp.com/). Go take a look and create a palette!
 
-(https://i.imgur.com/7X99IEX.png)
+![Palette Picker](https://i.imgur.com/7X99IEX.png)
 
-#### Original Specs - Abstract
+
+### Original Specs - Abstract
 
 There is a website out there called Coolors - and others like it are out there. They help you generate color palettes for websites or other design projects.
 
 Your job is to recreate some of this site’s functionality with your own backend and database. A user should be able to come to your site, generate a color palette, and save it for their own future projects.
 
-### Specifications
+#### Specifications
 
 Your application should have the following functionality. A user should be able to:
 
@@ -31,7 +32,7 @@ Your application should have the following functionality. A user should be able 
 - In addition to the functional requirement, on a separate dedicated git branch, go through each line of the server file and put a comment on each line that explains what that line of code is doing. Be as explicit as you can.
 
 
-### Tech Stack
+#### Tech Stack
 
 Backend: build using Express, Knex, and PostgreSQL. Server-side testing should be done using mocha, chai, and chai-http. There should be one client-side route ('/'), and other endpoints should be API endpoints ('api/v1/...'). Each API endpoint should respond with JSON-formatted data.
 
