@@ -1,10 +1,10 @@
 {
   "name": "PalettePicker",
   "version": "1.0.0",
-  "description": "",
+  "description": "This is a test",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test PORT=3001 mocha",
+    "test": "echo \"Error: no test specified\"",
     "start": "node server.js"
   },
   "repository": {
