@@ -1,7 +1,7 @@
 {
   "name": "PalettePicker",
   "version": "1.0.0",
-  "description": "This is not a test",
+  "description": "take2",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\"",
