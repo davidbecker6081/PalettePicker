@@ -10,9 +10,9 @@ chai.use(chaiHttp);
 
 before(done => {
   database.migrate.latest()
-    .then(() => { database.seed.run() })
-    .then(() => { done() })
-    .catch(error => { console.log(error) })
+    .then(() => database.seed.run())
+    .then(() => done())
+    .catch(error => console.log(error))
 });
 
 describe('Client Routes', () => {
