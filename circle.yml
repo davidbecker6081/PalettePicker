@@ -10,4 +10,4 @@ deployment:
   production:
     branch: master
     heroku:
-      appname: david-pallete-picker
+      appname: david-palette-picker
